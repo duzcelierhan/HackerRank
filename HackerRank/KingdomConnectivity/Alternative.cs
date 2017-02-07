@@ -21,7 +21,9 @@ namespace KingdomConnectivity
         private static long s_PathCount;
         private static int s_N, s_M;
         private static readonly Dictionary<int, List<int>> DPaths = new Dictionary<int, List<int>>();
-
+        private static bool failed = false;
+        private static bool recursive = false;
+        private static bool success = false;
 
         public static void Solve(int n, int m)
         {
@@ -69,12 +71,12 @@ namespace KingdomConnectivity
                             }
                             else
                             {
-
+                                Return();
                             }
                         }
                         else
                         {
-                            path[s_Position++] = city;
+                            path[s_Position] = city;
                         }
                     }
                     else
@@ -83,9 +85,16 @@ namespace KingdomConnectivity
                 }
                 else
                 {
-                    
+                    failed = true;
+                    Return();
                 }
             }
+        }
+
+        private static void Return()
+        {
+            var ret = s_CallStack.Peek();
+            ret
         }
     }
 }
