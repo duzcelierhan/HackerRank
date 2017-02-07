@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace KingdomConnectivity
 {
+
     /*
         Test Input:
         20 33
@@ -59,7 +60,9 @@ namespace KingdomConnectivity
         private static readonly Dictionary<int, List<int>> DPaths = new Dictionary<int, List<int>>();
         private static long s_PathCount;
         private static int s_N, s_M;
-        private const bool c_PrintPaths = false;
+#if PRINT
+        private const bool c_PrintPaths = true; 
+#endif
 
         [Flags]
         private enum BranchEnd
@@ -107,22 +110,20 @@ namespace KingdomConnectivity
                 if (m_City == s_N)
                 {
                     s_PathCount++;
-                    if(c_PrintPaths)
-                    {
-                        Console.Write("s");
-                        PrintStepsWithParent();
-                        Console.WriteLine($",{m_City}");
-                    }
+#if PRINT
+                    Console.Write("s");
+                    PrintStepsWithParent();
+                    Console.WriteLine($",{m_City}");
+#endif
                     return BranchEnd.Successfull;
                 }
                 if(MeOrParantHasStep(m_City))
                 {
-                    if (c_PrintPaths)
-                    {
-                        Console.Write("R");
-                        PrintStepsWithParent();
-                        Console.WriteLine($"{m_City}");
-                    }
+#if PRINT
+                    Console.Write("R");
+                    PrintStepsWithParent();
+                    Console.WriteLine($"{m_City}");
+#endif
                     return BranchEnd.Recursive;
                 }
 
@@ -131,12 +132,11 @@ namespace KingdomConnectivity
                     m_StepList.Add(m_City);
                     if (!DPaths.ContainsKey(m_City))
                     {
-                        if (c_PrintPaths)
-                        {
-                            Console.Write("F");
-                            PrintStepsWithParent();
-                            Console.WriteLine($",{m_City}");
-                        }
+#if PRINT
+                        Console.Write("F");
+                        PrintStepsWithParent();
+                        Console.WriteLine($",{m_City}");
+#endif
                         return BranchEnd.Fail;
                     }
 
@@ -147,22 +147,20 @@ namespace KingdomConnectivity
                         if (m_City == s_N)
                         {
                             s_PathCount++;
-                            if (c_PrintPaths)
-                            {
-                                Console.Write("S");
-                                PrintStepsWithParent();
-                                Console.WriteLine($",{m_City}");
-                            }
+#if PRINT
+                            Console.Write("S");
+                            PrintStepsWithParent();
+                            Console.WriteLine($",{m_City}");
+#endif
                             return BranchEnd.Successfull;
                         }
                         if (MeOrParantHasStep(m_City))
                         {
-                            if (c_PrintPaths)
-                            {
-                                Console.Write("r");
-                                PrintStepsWithParent();
-                                Console.WriteLine($",{m_City}");
-                            }
+#if PRINT
+                            Console.Write("r");
+                            PrintStepsWithParent();
+                            Console.WriteLine($",{m_City}");
+#endif
                             return BranchEnd.Recursive;
                         }
                     }
@@ -210,17 +208,15 @@ namespace KingdomConnectivity
                         DPaths[pair[0]].Add(pair[1]);
                 }
             }
-
-            if (c_PrintPaths)
+#if PRINT
+            Console.WriteLine("==== Paths Start ====");
+            foreach (KeyValuePair<int, List<int>> path in DPaths)
             {
-                Console.WriteLine("==== Paths Start ====");
-                foreach (KeyValuePair<int, List<int>> path in DPaths)
-                {
-                    Console.WriteLine($"{path.Key} : {string.Join(",", path.Value.Select(x => x.ToString()))}");
-                }
-
-                Console.WriteLine("==== Paths End ====");
+                Console.WriteLine($"{path.Key} : {string.Join(",", path.Value.Select(x => x.ToString()))}");
             }
+
+            Console.WriteLine("==== Paths End ====");
+#endif
 
             try
             {
