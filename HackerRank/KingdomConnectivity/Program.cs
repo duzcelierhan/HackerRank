@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace KingdomConnectivity
@@ -53,7 +54,11 @@ namespace KingdomConnectivity
         {
             string[] parts = Console.ReadLine()?.Split(' ');
             int[] ints = Array.ConvertAll(parts, int.Parse);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             Solve(ints[0], ints[1]);
+            sw.Stop();
+            Console.WriteLine($"It took {sw.Elapsed} to calculate");
             Console.ReadLine();
         }
 
