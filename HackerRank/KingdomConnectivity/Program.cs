@@ -60,9 +60,6 @@ namespace KingdomConnectivity
         private static readonly Dictionary<int, List<int>> DPaths = new Dictionary<int, List<int>>();
         private static long s_PathCount;
         private static int s_N, s_M;
-#if PRINT
-        private const bool c_PrintPaths = true; 
-#endif
 
         [Flags]
         private enum BranchEnd
@@ -82,7 +79,7 @@ namespace KingdomConnectivity
             private readonly int m_Start;
             private int m_City;
             private readonly Branch m_ParentBranch;
-            private readonly List<int> m_StepList = new List<int>();
+            private readonly HashSet<int> m_StepList = new HashSet<int>();
 
             public Branch(Branch parent, int start)
             {
@@ -204,8 +201,7 @@ namespace KingdomConnectivity
                     DPaths.Add(pair[0], new List<int> {pair[1]});
                 else
                 {
-                    //if (!DPaths[pair[0]].Contains(pair[1]))
-                        DPaths[pair[0]].Add(pair[1]);
+                    DPaths[pair[0]].Add(pair[1]);
                 }
             }
 #if PRINT
