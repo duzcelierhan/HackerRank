@@ -53,6 +53,8 @@ namespace KingdomConnectivity
             // Init with village 1 (Capital)
             path[0] = 1;
             passedVillages.Add(1);
+            int city = 1;
+            
             while (true)
             {
                 if (DPaths.ContainsKey(path[s_Position]))
@@ -60,7 +62,7 @@ namespace KingdomConnectivity
                     var lst = DPaths[path[s_Position]];
                     if (lst.Count == 1)
                     {
-                        var city = lst[0];
+                        city = lst[0];
                         if (city == s_N)
                         {
                             s_PathCount++;
@@ -71,16 +73,25 @@ namespace KingdomConnectivity
                             }
                             else
                             {
-                                Return();
+                                city = Return();
                             }
                         }
                         else
                         {
+                            //if()
                             path[s_Position] = city;
+                            
                         }
                     }
                     else
                     {
+                        Call c = new Call
+                        {
+                            returnAddress = s_Position,
+                            branches = new Queue<int>(lst)
+                        };
+                        city = c.branches.Dequeue();
+                        s_CallStack.Push(c);
                     }
                 }
                 else
@@ -88,13 +99,20 @@ namespace KingdomConnectivity
                     failed = true;
                     Return();
                 }
+                path[s_Position++] = city;
             }
         }
 
-        private static void Return()
+        private static int Return()
         {
             var ret = s_CallStack.Peek();
-            ret
+            if (ret.branches.Count == 1)
+            {
+                s_CallStack.Pop();
+            }
+            s_Position = ret.returnAddress + 1;
+
+            return ret.branches.Dequeue();
         }
     }
 }
