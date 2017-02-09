@@ -65,6 +65,7 @@ namespace KingdomConnectivity
         private static readonly Dictionary<int, List<int>> DPaths = new Dictionary<int, List<int>>();
         private static long s_PathCount;
         private static int s_N, s_M;
+        private static HashSet<int> s_PassedVillages=new HashSet<int>();
 
         [Flags]
         private enum BranchEnd
@@ -92,10 +93,10 @@ namespace KingdomConnectivity
                 this.m_Start = start;
             }
 
-            private bool MeOrParantHasStep(int stepNo)
-            {
-                return m_StepList.Contains(stepNo) || (m_ParentBranch?.MeOrParantHasStep(stepNo) ?? false);
-            }
+            //private bool MeOrParantHasStep(int stepNo)
+            //{
+            //    return m_StepList.Contains(stepNo) || (m_ParentBranch?.MeOrParantHasStep(stepNo) ?? false);
+            //}
 
             private void PrintStepsWithParent()
             {
@@ -119,7 +120,7 @@ namespace KingdomConnectivity
 #endif
                     return BranchEnd.Successfull;
                 }
-                if(MeOrParantHasStep(m_City))
+                if(s_PassedVillages.Contains(m_City))
                 {
 #if PRINT
                     Console.Write("R");
@@ -131,6 +132,7 @@ namespace KingdomConnectivity
 
                 while (true)
                 {
+                    s_PassedVillages.Add(m_City);
                     m_StepList.Add(m_City);
                     if (!DPaths.ContainsKey(m_City))
                     {
@@ -154,15 +156,17 @@ namespace KingdomConnectivity
                             PrintStepsWithParent();
                             Console.WriteLine($",{m_City}");
 #endif
+                            s_PassedVillages.ExceptWith(m_StepList);
                             return BranchEnd.Successfull;
                         }
-                        if (MeOrParantHasStep(m_City))
+                        if (s_PassedVillages.Contains(m_City))
                         {
 #if PRINT
                             Console.Write("r");
                             PrintStepsWithParent();
                             Console.WriteLine($",{m_City}");
 #endif
+                            s_PassedVillages.ExceptWith(m_StepList);
                             return BranchEnd.Recursive;
                         }
                     }
@@ -176,6 +180,7 @@ namespace KingdomConnectivity
                             be |= b.StartBranch();
                         }
 
+                        s_PassedVillages.ExceptWith(m_StepList);
                         if (!be.HasFlag(BranchEnd.Successfull) && be.HasFlag(BranchEnd.Recursive) && be.HasFlag(BranchEnd.Fail))
                             return BranchEnd.Fail;
 
