@@ -109,6 +109,8 @@ namespace KingdomConnectivity
             public BranchEnd StartBranch()
             {
                 m_City = m_Start;
+                //s_PassedVillages.Add(m_City);
+                //m_StepList.Add(m_City);
 
                 if (m_City == s_N)
                 {
@@ -118,6 +120,7 @@ namespace KingdomConnectivity
                     PrintStepsWithParent();
                     Console.WriteLine($",{m_City}");
 #endif
+                    s_PassedVillages.ExceptWith(m_StepList);
                     return BranchEnd.Successfull;
                 }
                 if(s_PassedVillages.Contains(m_City))
@@ -127,13 +130,13 @@ namespace KingdomConnectivity
                     PrintStepsWithParent();
                     Console.WriteLine($"{m_City}");
 #endif
+                    s_PassedVillages.ExceptWith(m_StepList);
                     return BranchEnd.Recursive;
                 }
 
                 while (true)
                 {
-                    s_PassedVillages.Add(m_City);
-                    m_StepList.Add(m_City);
+
                     if (!DPaths.ContainsKey(m_City))
                     {
 #if PRINT
@@ -141,6 +144,7 @@ namespace KingdomConnectivity
                         PrintStepsWithParent();
                         Console.WriteLine($",{m_City}");
 #endif
+                        s_PassedVillages.ExceptWith(m_StepList);
                         return BranchEnd.Fail;
                     }
 
@@ -169,9 +173,13 @@ namespace KingdomConnectivity
                             s_PassedVillages.ExceptWith(m_StepList);
                             return BranchEnd.Recursive;
                         }
+                        s_PassedVillages.Add(m_City);
+                        m_StepList.Add(m_City);
                     }
                     else
                     {
+                        s_PassedVillages.Add(m_City);
+                        m_StepList.Add(m_City);
                         //BranchEnd be = lst.Select(i => new Branch(this, i)).Aggregate(BranchEnd.None, (current, b) => current | b.StartBranch());
                         BranchEnd be = BranchEnd.None;
                         foreach (int i in lst)
