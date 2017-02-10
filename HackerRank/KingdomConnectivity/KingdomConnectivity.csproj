@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alternative.cs" />
+    <Compile Include="Alternative3.cs" />
     <Compile Include="Alternative2.cs" />
     <Compile Include="KingdomConnectivity.cs" />
     <Compile Include="Program.cs" />
