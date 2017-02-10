@@ -55,6 +55,27 @@ namespace KingdomConnectivity
             string[] parts = Console.ReadLine()?.Split(' ');
             int[] ints = Array.ConvertAll(parts, int.Parse);
             Stopwatch sw = new Stopwatch();
+
+            s_N = ints[0];
+            s_M = ints[1];
+
+            if (s_N < 2 || s_N > 1e4)
+                throw new ArgumentOutOfRangeException(nameof(s_N), "N must in range 2 <= N <=10^4");
+            if (s_M < 1 || s_M > 1e5)
+                throw new ArgumentOutOfRangeException(nameof(s_M), "M must in range 1 <= M <=10^5");
+
+            for (int i = 0; i < s_M; i++)
+            {
+                parts = Console.ReadLine()?.Split(' ');
+                int[] pair = Array.ConvertAll(parts, int.Parse);
+                if (!DPaths.ContainsKey(pair[0]))
+                    DPaths.Add(pair[0], new List<int> { pair[1] });
+                else
+                {
+                    DPaths[pair[0]].Add(pair[1]);
+                }
+            }
+
             sw.Start();
             Solve(ints[0], ints[1]);
             sw.Stop();
@@ -203,25 +224,9 @@ namespace KingdomConnectivity
 
         public static void Solve(int n, int m)
         {
-            if (n < 2 || n > 1e4)
-                throw new ArgumentOutOfRangeException(nameof(n), "N must in range 2 <= N <=10^4");
-            if (m < 1 || m > 1e5)
-                throw new ArgumentOutOfRangeException(nameof(m), "M must in range 1 <= M <=10^5");
 
-            s_N = n;
-            s_M = m;
 
-            for (int i = 0; i < s_M; i++)
-            {
-                string[] parts = Console.ReadLine()?.Split(' ');
-                int[] pair = Array.ConvertAll(parts, int.Parse);
-                if (!DPaths.ContainsKey(pair[0]))
-                    DPaths.Add(pair[0], new List<int> {pair[1]});
-                else
-                {
-                    DPaths[pair[0]].Add(pair[1]);
-                }
-            }
+
 #if PRINT
             Console.WriteLine("==== Paths Start ====");
             foreach (KeyValuePair<int, List<int>> path in DPaths)

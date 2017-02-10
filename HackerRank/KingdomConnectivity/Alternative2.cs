@@ -99,12 +99,13 @@ namespace KingdomConnectivity
                     
                 }
             }
+            return s_pathCount;
         }
 
-        private static int GetCity()
-        {
+        //private static int GetCity()
+        //{
 
-        }
+        //}
 
         public static int Solve2(int dest, Dictionary<int, List<int>> nexts)
         {
