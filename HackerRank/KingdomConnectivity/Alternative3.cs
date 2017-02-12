@@ -26,21 +26,63 @@ namespace KingdomConnectivity
 
         public static int Solve(int dest, Dictionary<int, List<int>> nexts)
         {
-            Stack<int> stack = new Stack<int>((int) 1e9);
-            Stack<int> counters = new Stack<int>((int)1e9);
+            Stack<int> stack = new Stack<int>((int) 1e5);
+            Stack<int> counters = new Stack<int>((int)1e5);
+            Stack<int> tmpPath = new Stack<int>();
+            int branchDepth = 0;
             int tmpPathCount = 0;
-            Dictionary<int, int> passed = new Dictionary<int, int>(dest);
+            Dictionary<int, int> keyNodes = new Dictionary<int, int>(dest);
+            HashSet<int> passedNodes = new HashSet<int>();
             int paths = 0;
             bool success = false;
             bool fail = false;
             bool recursive = false;
             int city = 1;
             List<int> lst;
+            int tmpSuccessCount = 0;
 
             while (true)
             {
-                if (nexts.TryGetValue(city, out lst))
+                
+                tmpPath.Push(city);
+                passedNodes.Add(city);
+                branchDepth++;
+            //beginning:
+
+                if (city == dest)
                 {
+                    // Infinite paths
+                    if (recursive)
+                        return -1;
+                    success = true;
+                    tmpPathCount++;
+                    paths++;
+                    if (stack.Count == 0)
+                        break;
+                    for (int i = 0; i < branchDepth; i++)
+                        passedNodes.Remove(tmpPath.Pop());
+                    branchDepth = 0;
+                    city = stack.Pop();
+                    goto pass;
+                }
+
+                if (keyNodes.TryGetValue(city, out tmpSuccessCount))
+                {
+                    paths += tmpSuccessCount;
+
+                    // Pop for continue
+                    if (stack.Count == 0)
+                        break;
+
+                    for (int i = 0; i < branchDepth; i++)
+                        passedNodes.Remove(tmpPath.Pop());
+
+                    branchDepth = 0;// stack.Pop();
+                    city = stack.Pop();
+                }
+                else if (nexts.TryGetValue(city, out lst))
+                {
+
                     if (lst.Count == 1)
                     {
                         city = lst[0];
@@ -48,6 +90,9 @@ namespace KingdomConnectivity
                     else
                     {
                         stack.Push(city);
+                        stack.Push(branchDepth);
+                        branchDepth = 0;
+                        keyNodes.Add(city, 0);
                         counters.Push(tmpPathCount);
                         tmpPathCount = 0;
                         // Push flags to stack
@@ -73,10 +118,27 @@ namespace KingdomConnectivity
                     fail = true;
                     if(stack.Count==0)
                         break;
+                    
+                    for (int i = 0; i < branchDepth; i++)
+                        passedNodes.Remove(tmpPath.Pop());
+                    branchDepth = 0;
+                    //branchDepth = stack.Pop();
                     city = stack.Pop();
-
                 }
-
+            pass:
+                if(passedNodes.Contains(city))
+                {
+                    // Infinite paths
+                    if (success)
+                        return -1;
+                    recursive = true;
+                    if (stack.Count == 0)
+                        break;
+                    for (int i = 0; i < branchDepth; i++)
+                        passedNodes.Remove(tmpPath.Pop());
+                    branchDepth = 0;
+                    city = stack.Pop();
+                }
                 if (city < 0)
                 {
                     var flags = (Branch)city;
@@ -93,15 +155,13 @@ namespace KingdomConnectivity
                     fail |= flags.HasFlag(Branch.Fail);
                     recursive |= flags.HasFlag(Branch.Recursive);
 
+                    for (int i = 0; i < branchDepth; i++)
+                        passedNodes.Remove(tmpPath.Pop());
+
+                    branchDepth = stack.Pop();
                     city = stack.Pop();
                     tmpPathCount += counters.Pop();
-                    passed[city] += tmpPathCount;
-                }
-                else if (city == dest)
-                {
-                    success = true;
-                    tmpPathCount++;
-                    paths++;
+                    keyNodes[city] += tmpPathCount;
                 }
             }
 

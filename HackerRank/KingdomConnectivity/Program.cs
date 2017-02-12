@@ -77,9 +77,20 @@ namespace KingdomConnectivity
             }
 
             sw.Start();
-            Solve(ints[0], ints[1]);
+            //Solve(ints[0], ints[1]);
+            //int paths = Solve();//Alternative3.Solve(s_N, DPaths);
+            int pathsFirst = FirstSolution.Solve(s_N, DPaths);
             sw.Stop();
-            Console.WriteLine($"It took {sw.Elapsed} to calculate");
+            TimeSpan firstSolTime = sw.Elapsed;
+            Console.WriteLine($"First solution: {pathsFirst} paths in {firstSolTime} time");
+            sw.Restart();
+            int pathsAlt3 = Alternative3.Solve(s_N, DPaths);
+            sw.Stop();
+            TimeSpan altSol3Time = sw.Elapsed;
+            Console.WriteLine($"Alternative 3 solution: {pathsAlt3} paths in {altSol3Time} time");
+
+            //Console.WriteLine(paths < 0 ? "INFINITE PATHS" : (paths / 2).ToString());
+            //Console.WriteLine($"It took {sw.Elapsed} to calculate");
             Console.ReadLine();
         }
 
@@ -222,7 +233,7 @@ namespace KingdomConnectivity
             }
         }
 
-        public static void Solve(int n, int m)
+        public static int Solve()
         {
 
 
@@ -242,13 +253,20 @@ namespace KingdomConnectivity
                 Branch b = new Branch(null, 1);
                 var res = b.StartBranch();
                 if (res.HasFlag(BranchEnd.Successfull) && res.HasFlag(BranchEnd.Recursive))
-                    Console.WriteLine("INFINITE PATHS");
+                {
+                    //Console.WriteLine("INFINITE PATHS");
+                    return -1;
+                }
                 else
-                    Console.WriteLine(s_PathCount);
+                {
+                    //Console.WriteLine(s_PathCount);
+                    return (int)s_PathCount;
+                }
             }
             catch (InfinitePathException)
             {
-                Console.WriteLine("INFINITE PATHS");
+                //Console.WriteLine("INFINITE PATHS");
+                return -1;
             }
         }
     }
