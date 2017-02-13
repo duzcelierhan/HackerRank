@@ -1,13 +1,18 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace KingdomConnectivity
 {
-    class FirstSolution
+    class FirstSolutionM01
+
     {
         private static Dictionary<int, List<int>> s_DPaths = new Dictionary<int, List<int>>();
+        private static Dictionary<int, int> keyNodePaths = new Dictionary<int, int>();
         private static long s_PathCount;
+        private static HashSet<int> traversedCities = new HashSet<int>();
         private static int s_N, s_M;
 
         [Flags]
@@ -28,7 +33,8 @@ namespace KingdomConnectivity
             private readonly int m_Start;
             private int m_City;
             private readonly Branch m_ParentBranch;
-            private readonly HashSet<int> m_StepList = new HashSet<int>();
+            private readonly List<int> m_StepList = new List<int>();
+            private int m_pathCount = 0;
 
             public Branch(Branch parent, int start)
             {
@@ -38,7 +44,8 @@ namespace KingdomConnectivity
 
             private bool MeOrParantHasStep(int stepNo)
             {
-                return m_StepList.Contains(stepNo) || (m_ParentBranch?.MeOrParantHasStep(stepNo) ?? false);
+                //return m_StepList.Contains(stepNo) || (m_ParentBranch?.MeOrParantHasStep(stepNo) ?? false);
+                return traversedCities.Contains(stepNo);
             }
 
             private void PrintStepsWithParent()
@@ -49,18 +56,22 @@ namespace KingdomConnectivity
                 Console.Write(steps);
             }
 
-            public BranchEnd StartBranch()
+            public BranchEnd StartBranch(out int pathCount)
             {
                 m_City = m_Start;
 
                 if (m_City == s_N)
                 {
-                    s_PathCount++;
+                    m_pathCount++;
 #if PRINT
                     Console.Write("s");
                     PrintStepsWithParent();
                     Console.WriteLine($",{m_City}");
 #endif
+                    if (!keyNodePaths.ContainsKey(this.m_Start))
+                        keyNodePaths.Add(m_Start, m_pathCount);
+                    traversedCities.ExceptWith(this.m_StepList);
+                    pathCount = m_pathCount;
                     return BranchEnd.Successfull;
                 }
                 if (MeOrParantHasStep(m_City))
@@ -70,12 +81,17 @@ namespace KingdomConnectivity
                     PrintStepsWithParent();
                     Console.WriteLine($"{m_City}");
 #endif
+                    if (!keyNodePaths.ContainsKey(this.m_Start))
+                        keyNodePaths.Add(m_Start, m_pathCount);
+                    traversedCities.ExceptWith(this.m_StepList);
+                    pathCount = m_pathCount;
                     return BranchEnd.Recursive;
                 }
 
                 while (true)
                 {
                     m_StepList.Add(m_City);
+                    traversedCities.Add(m_City);
                     if (!s_DPaths.ContainsKey(m_City))
                     {
 #if PRINT
@@ -83,6 +99,10 @@ namespace KingdomConnectivity
                         PrintStepsWithParent();
                         Console.WriteLine($",{m_City}");
 #endif
+                        if (!keyNodePaths.ContainsKey(this.m_Start))
+                            keyNodePaths.Add(m_Start, m_pathCount);
+                        traversedCities.ExceptWith(this.m_StepList);
+                        pathCount = m_pathCount;
                         return BranchEnd.Fail;
                     }
 
@@ -92,12 +112,16 @@ namespace KingdomConnectivity
                         m_City = lst[0];
                         if (m_City == s_N)
                         {
-                            s_PathCount++;
+                            m_pathCount++;
 #if PRINT
                             Console.Write("S");
                             PrintStepsWithParent();
                             Console.WriteLine($",{m_City}");
 #endif
+                            if (!keyNodePaths.ContainsKey(this.m_Start))
+                                keyNodePaths.Add(m_Start, m_pathCount);
+                            traversedCities.ExceptWith(this.m_StepList);
+                            pathCount = m_pathCount;
                             return BranchEnd.Successfull;
                         }
                         if (MeOrParantHasStep(m_City))
@@ -107,6 +131,10 @@ namespace KingdomConnectivity
                             PrintStepsWithParent();
                             Console.WriteLine($",{m_City}");
 #endif
+                            if(!keyNodePaths.ContainsKey(this.m_Start))
+                                keyNodePaths.Add(m_Start, m_pathCount);
+                            traversedCities.ExceptWith(this.m_StepList);
+                            pathCount = m_pathCount;
                             return BranchEnd.Recursive;
                         }
                     }
@@ -115,17 +143,34 @@ namespace KingdomConnectivity
                         BranchEnd be = BranchEnd.None;
                         foreach (int i in lst)
                         {
-                            Branch b = new Branch(this, i);
-                            be |= b.StartBranch();
+                            int subPathCount;
+                            if (keyNodePaths.ContainsKey(i))
+                                subPathCount = keyNodePaths[i];
+                            else
+                            {
+                                Branch b = new Branch(this, i);
+                                be |= b.StartBranch(out subPathCount);
+                            }
+                            this.m_pathCount += subPathCount;
                         }
 
                         if (!be.HasFlag(BranchEnd.Successfull) && be.HasFlag(BranchEnd.Recursive) &&
                             be.HasFlag(BranchEnd.Fail))
+                        {
+                            if (!keyNodePaths.ContainsKey(this.m_Start))
+                                keyNodePaths.Add(m_Start, m_pathCount);
+                            traversedCities.ExceptWith(this.m_StepList);
+                            pathCount = m_pathCount;
                             return BranchEnd.Fail;
+                        }
 
                         if (be.HasFlag(BranchEnd.Successfull) && be.HasFlag(BranchEnd.Recursive))
                             throw new InfinitePathException();
 
+                        if (!keyNodePaths.ContainsKey(this.m_Start))
+                            keyNodePaths.Add(m_Start, m_pathCount);
+                        traversedCities.ExceptWith(this.m_StepList);
+                        pathCount = m_pathCount;
                         return be;
                     }
                 }
@@ -148,19 +193,20 @@ namespace KingdomConnectivity
 
             Console.WriteLine("==== Paths End ====");
 #endif
-
+            
             try
             {
                 s_PathCount = 0;
                 Branch b = new Branch(null, start);
-                var res = b.StartBranch();
+                int mainPathCount;
+                var res = b.StartBranch(out mainPathCount);
                 if (res.HasFlag(BranchEnd.Successfull) && res.HasFlag(BranchEnd.Recursive))
                 {
                     //Console.WriteLine("INFINITE PATHS");
                     return -1;
                 }
                 //Console.WriteLine(s_PathCount);
-                return (int)s_PathCount;
+                return mainPathCount;
             }
             catch (InfinitePathException)
             {
@@ -170,4 +216,3 @@ namespace KingdomConnectivity
         }
     }
 }
-
