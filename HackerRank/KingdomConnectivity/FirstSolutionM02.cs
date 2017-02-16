@@ -1,14 +1,16 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace KingdomConnectivity
 {
-    class FirstSolution
+    class FirstSolutionM02
     {
-        private static Dictionary<int, List<int>> s_DPaths = new Dictionary<int, List<int>>();
-        private static long s_PathCount;
+        private static Dictionary<int, List<Solution.Destination>> s_DPaths = new Dictionary<int, List<Solution.Destination>>();
         private static int s_N, s_M;
+        private static HashSet<int> passedCities = new HashSet<int>();
 
         [Flags]
         private enum BranchEnd
@@ -49,13 +51,14 @@ namespace KingdomConnectivity
                 Console.Write(steps);
             }
 
-            public BranchEnd StartBranch()
+            public BranchEnd StartBranch(out int pathCount)
             {
                 m_City = m_Start;
+                pathCount = 0;
 
                 if (m_City == s_N)
                 {
-                    s_PathCount++;
+                    pathCount++;
 #if PRINT
                     Console.Write("s");
                     PrintStepsWithParent();
@@ -70,6 +73,7 @@ namespace KingdomConnectivity
                     PrintStepsWithParent();
                     Console.WriteLine($"{m_City}");
 #endif
+                    pathCount = 0;
                     return BranchEnd.Recursive;
                 }
 
@@ -83,16 +87,17 @@ namespace KingdomConnectivity
                         PrintStepsWithParent();
                         Console.WriteLine($",{m_City}");
 #endif
+                        pathCount = 0;
                         return BranchEnd.Fail;
                     }
 
                     var lst = s_DPaths[m_City];
                     if (lst.Count == 1)
                     {
-                        m_City = lst[0];
+                        m_City = lst[0].City;
                         if (m_City == s_N)
                         {
-                            s_PathCount++;
+                            pathCount++;
 #if PRINT
                             Console.Write("S");
                             PrintStepsWithParent();
@@ -107,17 +112,22 @@ namespace KingdomConnectivity
                             PrintStepsWithParent();
                             Console.WriteLine($",{m_City}");
 #endif
+                            pathCount = 0;
                             return BranchEnd.Recursive;
                         }
                     }
                     else
                     {
                         BranchEnd be = BranchEnd.None;
-                        foreach (int i in lst)
+                        int subPathCount = 0;
+                        foreach (Solution.Destination i in lst)
                         {
-                            Branch b = new Branch(this, i);
-                            be |= b.StartBranch();
+                            Branch b = new Branch(this, i.City);
+                            be |= b.StartBranch(out subPathCount);
+                            subPathCount *= i.Multiplier;
                         }
+
+                        pathCount += subPathCount;
 
                         if (!be.HasFlag(BranchEnd.Successfull) && be.HasFlag(BranchEnd.Recursive) &&
                             be.HasFlag(BranchEnd.Fail))
@@ -132,7 +142,7 @@ namespace KingdomConnectivity
             }
         }
 
-        public static int Solve(int start, int dest, Dictionary<int, List<int>> nexts)
+        public static int Solve(int start, int dest, Dictionary<int, List<Solution.Destination>> nexts)
         {
 
 
@@ -151,16 +161,16 @@ namespace KingdomConnectivity
 
             try
             {
-                s_PathCount = 0;
+                int pathCount = 0;
                 Branch b = new Branch(null, start);
-                var res = b.StartBranch();
+                var res = b.StartBranch(out pathCount);
                 if (res.HasFlag(BranchEnd.Successfull) && res.HasFlag(BranchEnd.Recursive))
                 {
                     //Console.WriteLine("INFINITE PATHS");
                     return -1;
                 }
                 //Console.WriteLine(s_PathCount);
-                return (int)s_PathCount;
+                return (int)pathCount;
             }
             catch (InfinitePathException)
             {
@@ -170,4 +180,3 @@ namespace KingdomConnectivity
         }
     }
 }
-

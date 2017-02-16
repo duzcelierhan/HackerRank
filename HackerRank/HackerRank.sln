@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KingdomConnectivity", "King
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircularArrayRotation", "CircularArrayRotation\CircularArrayRotation.csproj", "{788FF478-C1A4-4DF3-9457-4E07270EE95E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivisibleNumbers", "DivisibleNumbers\DivisibleNumbers.csproj", "{73D4C2E1-1925-4746-9355-8A722F8DFCD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{788FF478-C1A4-4DF3-9457-4E07270EE95E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{788FF478-C1A4-4DF3-9457-4E07270EE95E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{788FF478-C1A4-4DF3-9457-4E07270EE95E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73D4C2E1-1925-4746-9355-8A722F8DFCD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73D4C2E1-1925-4746-9355-8A722F8DFCD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73D4C2E1-1925-4746-9355-8A722F8DFCD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73D4C2E1-1925-4746-9355-8A722F8DFCD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

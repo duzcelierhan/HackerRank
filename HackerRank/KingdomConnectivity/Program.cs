@@ -50,12 +50,27 @@ namespace KingdomConnectivity
 
     class Solution
     {
+        public class Destination
+        {
+            public int City;
+            public int Multiplier;
+
+            public Destination(int city, int mul)
+            {
+                City = city;
+                Multiplier = mul;
+            }
+            public Destination(int city):this(city, 1) { }
+        }
         static void Main(string[] args)
         {
             string[] parts = Console.ReadLine()?.Split(' ');
             int[] ints = Array.ConvertAll(parts, int.Parse);
             Stopwatch sw = new Stopwatch();
             Dictionary<int, List<int>> dPathsReversed = new Dictionary<int, List<int>>();
+            Dictionary<int, List<Destination>> dPathWithDest = new Dictionary<int, List<Destination>>();
+            Dictionary<int, List<Destination>> dPathWithDestReversed = new Dictionary<int, List<Destination>>();
+            //
             List<Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>> algorithms =
                 new List<Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>>
                 {
@@ -63,8 +78,14 @@ namespace KingdomConnectivity
                     //    FirstSolution.Solve),
                     //new Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>("First Solution Modified 01",
                     //    FirstSolutionM01.Solve),
-                    new Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>("Alternative Algortihm 03",
-                        Alternative3.Solve)
+                    //new Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>("Alternative Algortihm 03",
+                    //    Alternative3.Solve)
+                };
+            List<Tuple<string, Func<int, int, Dictionary<int, List<Destination>>, int>>> algorithmsWithDest =
+                new List<Tuple<string, Func<int, int, Dictionary<int, List<Destination>>, int>>>
+                {
+                    new Tuple<string, Func<int, int, Dictionary<int, List<Destination>>, int>>(
+                        "First Solution Modified 02", FirstSolutionM02.Solve)
                 };
             bool[] reversed = {
                 false,
@@ -98,6 +119,31 @@ namespace KingdomConnectivity
                 {
                     dPathsReversed[pair[1]].Add(pair[0]);
                 }
+                if (!dPathWithDest.ContainsKey(pair[0]))
+                {
+                    dPathWithDest.Add(pair[0], new List<Destination> {new Destination(pair[1])});
+                }
+                else
+                {
+                    var f = dPathWithDest[pair[0]].Find(x => x.City == pair[1]);
+                    if (f == null)
+                        dPathWithDest[pair[0]].Add(new Destination(pair[1]));
+                    else
+                        f.Multiplier++;
+                }
+
+                if (!dPathWithDestReversed.ContainsKey(pair[1]))
+                {
+                    dPathWithDestReversed.Add(pair[1], new List<Destination> { new Destination(pair[0]) });
+                }
+                else
+                {
+                    var f = dPathWithDestReversed[pair[1]].Find(x => x.City == pair[0]);
+                    if (f == null)
+                        dPathWithDestReversed[pair[1]].Add(new Destination(pair[0]));
+                    else
+                        f.Multiplier++;
+                }
             }
 
             //sw.Start();
@@ -125,6 +171,20 @@ namespace KingdomConnectivity
                 {
                     sw.Restart();
                     var paths = algorithm.Item2(rev ? s_N : 1, rev ? 1 : s_N, rev ? dPathsReversed : DPaths);
+                    sw.Stop();
+                    string revStr = rev ? "(reversed):" : ":";
+                    Console.WriteLine($"{algorithm.Item1} {revStr} {paths} paths in {sw.Elapsed} time");
+                    sw.Reset();
+                }
+            }
+
+            foreach (bool rev in reversed)
+            {
+                //bool rev = i == 1;
+                foreach (var algorithm in algorithmsWithDest)
+                {
+                    sw.Restart();
+                    var paths = algorithm.Item2(rev ? s_N : 1, rev ? 1 : s_N, rev ? dPathWithDestReversed : dPathWithDest);
                     sw.Stop();
                     string revStr = rev ? "(reversed):" : ":";
                     Console.WriteLine($"{algorithm.Item1} {revStr} {paths} paths in {sw.Elapsed} time");

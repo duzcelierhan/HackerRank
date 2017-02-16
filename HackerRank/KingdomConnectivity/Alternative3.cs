@@ -29,6 +29,7 @@ namespace KingdomConnectivity
             Stack<int> stack = new Stack<int>((int) 1e5);
             Stack<int> counters = new Stack<int>((int)1e5);
             Stack<int> tmpPath = new Stack<int>();
+            Stack<int> branchDepths = new Stack<int>();
             int branchDepth = 0;
             int tmpPathCount = 0;
             Dictionary<int, int> keyNodes = new Dictionary<int, int>(dest);
@@ -39,7 +40,8 @@ namespace KingdomConnectivity
             bool recursive = false;
             int city = start;
             List<int> lst;
-            int tmpSuccessCount = 0;
+            int tmpSuccessCount;
+            bool comingFromSuccess = false;
 
             while (true)
             {
@@ -64,6 +66,7 @@ namespace KingdomConnectivity
                         passedNodes.Remove(tmpPath.Pop());
                     branchDepth = 0;
                     city = stack.Pop();
+                    comingFromSuccess = true;
                     goto pass;
                 }
 
@@ -91,7 +94,8 @@ namespace KingdomConnectivity
                     else
                     {
                         stack.Push(city);
-                        stack.Push(branchDepth);
+                        //stack.Push(branchDepth);
+                        branchDepths.Push(branchDepth);
                         branchDepth = 0;
                         keyNodes.Add(city, 0);
                         counters.Push(tmpPathCount);
@@ -165,10 +169,10 @@ namespace KingdomConnectivity
                     else if (success && recursive)
                         return -1;
 
-                    for (int i = 0; i < branchDepth; i++)
-                        passedNodes.Remove(tmpPath.Pop());
+                    //for (int i = 0; i < branchDepth; i++)
+                    //    passedNodes.Remove(tmpPath.Pop());
 
-                    branchDepth = stack.Pop();
+                    //branchDepth = branchDepths.Pop(); //stack.Pop();
                     city = stack.Pop();
                     
                     keyNodes[city] += tmpPathCount;
@@ -176,6 +180,20 @@ namespace KingdomConnectivity
                     if (stack.Count == 0)
                         break;
                     city = stack.Pop();
+
+                    // Remove current tmpPath for branch depth and get previous branch depth
+                    
+
+                    if(!comingFromSuccess)
+                    {
+                        branchDepth = branchDepths.Count == 0 ? 0 : branchDepths.Pop();
+
+                        for (int i = 0; i < branchDepth; i++)
+                            passedNodes.Remove(tmpPath.Pop());
+                        
+                    }
+                    comingFromSuccess = false;
+                    
                     goto pass;
                 }
             }
