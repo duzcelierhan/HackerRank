@@ -8,9 +8,10 @@ namespace KingdomConnectivity
 {
     class FirstSolutionM02
     {
-        private static Dictionary<int, List<Solution.Destination>> s_DPaths = new Dictionary<int, List<Solution.Destination>>();
+        private static Dictionary<int, List<SolutionCandidate.Destination>> s_DPaths = new Dictionary<int, List<SolutionCandidate.Destination>>();
         private static int s_N, s_M;
         private static HashSet<int> passedCities = new HashSet<int>();
+        private const int Modulus = (int) 1e9;
 
         [Flags]
         private enum BranchEnd
@@ -120,7 +121,7 @@ namespace KingdomConnectivity
                     {
                         BranchEnd be = BranchEnd.None;
                         int subPathCount = 0;
-                        foreach (Solution.Destination i in lst)
+                        foreach (SolutionCandidate.Destination i in lst)
                         {
                             Branch b = new Branch(this, i.City);
                             be |= b.StartBranch(out subPathCount);
@@ -142,7 +143,7 @@ namespace KingdomConnectivity
             }
         }
 
-        public static int Solve(int start, int dest, Dictionary<int, List<Solution.Destination>> nexts)
+        public static int Solve(int start, int dest, Dictionary<int, List<SolutionCandidate.Destination>> nexts)
         {
 
 

@@ -15,6 +15,7 @@ namespace KingdomConnectivity
         //private static long s_PathCount;
         private static HashSet<int> traversedCities = new HashSet<int>();
         private static int s_N, s_M;
+        private const int Modulus = (int) 1e9;
 
         [Flags]
         private enum BranchEnd
@@ -191,8 +192,7 @@ namespace KingdomConnectivity
 
                             if (m_PathCount < 0 || m_PathCount > (int)1e9)
                             {
-                                m_PathCount = 0;
-                                break;
+                                m_PathCount %= Modulus;
                             }
                         }
 

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tests>
+  <testcase name="Test Case #8">
+    <input>524275</input>
+    <output>15</output>
+  </testcase>
+</tests>

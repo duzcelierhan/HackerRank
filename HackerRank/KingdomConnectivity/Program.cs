@@ -5,50 +5,7 @@ using System.Linq;
 
 namespace KingdomConnectivity
 {
-
-    /*
-        Test Input:
-        20 33
-        10 15
-        15 17
-        8 18
-        12 5
-        11 4
-        16 14
-        10 17
-        12 5
-        4 12
-        10 15
-        1 7
-        2 20
-        1 10
-        2 20
-        12 5
-        15 9
-        8 11
-        16 6
-        4 12
-        13 2
-        15 17
-        3 15
-        14 8
-        11 19
-        1 16
-        9 20
-        9 13
-        16 18
-        14 6
-        1 3
-        12 5
-        4 16
-        6 8
-
-        Expected Output:
-        9
-        */
-
-
-    class Solution
+    class SolutionCandidate
     {
         public class Destination
         {
@@ -62,140 +19,140 @@ namespace KingdomConnectivity
             }
             public Destination(int city):this(city, 1) { }
         }
-        static void Main(string[] args)
-        {
-            string[] parts = Console.ReadLine()?.Split(' ');
-            int[] ints = Array.ConvertAll(parts, int.Parse);
-            Stopwatch sw = new Stopwatch();
-            Dictionary<int, List<int>> dPathsReversed = new Dictionary<int, List<int>>();
-            Dictionary<int, List<Destination>> dPathWithDest = new Dictionary<int, List<Destination>>();
-            Dictionary<int, List<Destination>> dPathWithDestReversed = new Dictionary<int, List<Destination>>();
-            //
-            List<Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>> algorithms =
-                new List<Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>>
-                {
-                    //new Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>("First Solution",
-                    //    FirstSolution.Solve),
-                    //new Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>("First Solution Modified 01",
-                    //    FirstSolutionM01.Solve),
-                    //new Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>("Alternative Algortihm 03",
-                    //    Alternative3.Solve)
-                };
-            List<Tuple<string, Func<int, int, Dictionary<int, List<Destination>>, int>>> algorithmsWithDest =
-                new List<Tuple<string, Func<int, int, Dictionary<int, List<Destination>>, int>>>
-                {
-                    new Tuple<string, Func<int, int, Dictionary<int, List<Destination>>, int>>(
-                        "First Solution Modified 02", FirstSolutionM02.Solve)
-                };
-            bool[] reversed = {
-                false,
-                //true
-            };
-            // Start
-            s_N = ints[0];
-            s_M = ints[1];
+        //static void Main(string[] args)
+        //{
+        //    string[] parts = Console.ReadLine()?.Split(' ');
+        //    int[] ints = Array.ConvertAll(parts, int.Parse);
+        //    Stopwatch sw = new Stopwatch();
+        //    Dictionary<int, List<int>> dPathsReversed = new Dictionary<int, List<int>>();
+        //    Dictionary<int, List<Destination>> dPathWithDest = new Dictionary<int, List<Destination>>();
+        //    Dictionary<int, List<Destination>> dPathWithDestReversed = new Dictionary<int, List<Destination>>();
+        //    //
+        //    List<Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>> algorithms =
+        //        new List<Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>>
+        //        {
+        //            //new Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>("First Solution",
+        //            //    FirstSolution.Solve),
+        //            new Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>("First Solution Modified 01",
+        //                FirstSolutionM01.Solve),
+        //            //new Tuple<string, Func<int, int, Dictionary<int, List<int>>, int>>("Alternative Algortihm 03",
+        //            //    Alternative3.Solve)
+        //        };
+        //    List<Tuple<string, Func<int, int, Dictionary<int, List<Destination>>, int>>> algorithmsWithDest =
+        //        new List<Tuple<string, Func<int, int, Dictionary<int, List<Destination>>, int>>>
+        //        {
+        //            //new Tuple<string, Func<int, int, Dictionary<int, List<Destination>>, int>>(
+        //            //    "First Solution Modified 02", FirstSolutionM02.Solve)
+        //        };
+        //    bool[] reversed = {
+        //        false,
+        //        //true
+        //    };
+        //    // Start
+        //    s_N = ints[0];
+        //    s_M = ints[1];
 
-            if (s_N < 2 || s_N > 1e4)
-                throw new ArgumentOutOfRangeException(nameof(s_N), "N must in range 2 <= N <=10^4");
-            if (s_M < 1 || s_M > 1e5)
-                throw new ArgumentOutOfRangeException(nameof(s_M), "M must in range 1 <= M <=10^5");
+        //    if (s_N < 2 || s_N > 1e4)
+        //        throw new ArgumentOutOfRangeException(nameof(s_N), "N must in range 2 <= N <=10^4");
+        //    if (s_M < 1 || s_M > 1e5)
+        //        throw new ArgumentOutOfRangeException(nameof(s_M), "M must in range 1 <= M <=10^5");
 
-            for (int i = 0; i < s_M; i++)
-            {
-                parts = Console.ReadLine()?.Split(' ');
-                int[] pair = Array.ConvertAll(parts, int.Parse);
-                if (!DPaths.ContainsKey(pair[0]))
-                    DPaths.Add(pair[0], new List<int> { pair[1] });
-                else
-                {
-                    DPaths[pair[0]].Add(pair[1]);
-                }
+        //    for (int i = 0; i < s_M; i++)
+        //    {
+        //        parts = Console.ReadLine()?.Split(' ');
+        //        int[] pair = Array.ConvertAll(parts, int.Parse);
+        //        if (!DPaths.ContainsKey(pair[0]))
+        //            DPaths.Add(pair[0], new List<int> { pair[1] });
+        //        else
+        //        {
+        //            DPaths[pair[0]].Add(pair[1]);
+        //        }
 
-                if (!dPathsReversed.ContainsKey(pair[1]))
-                {
-                    dPathsReversed.Add(pair[1], new List<int> { pair[0] });
-                }
-                else
-                {
-                    dPathsReversed[pair[1]].Add(pair[0]);
-                }
-                if (!dPathWithDest.ContainsKey(pair[0]))
-                {
-                    dPathWithDest.Add(pair[0], new List<Destination> {new Destination(pair[1])});
-                }
-                else
-                {
-                    var f = dPathWithDest[pair[0]].Find(x => x.City == pair[1]);
-                    if (f == null)
-                        dPathWithDest[pair[0]].Add(new Destination(pair[1]));
-                    else
-                        f.Multiplier++;
-                }
+        //        if (!dPathsReversed.ContainsKey(pair[1]))
+        //        {
+        //            dPathsReversed.Add(pair[1], new List<int> { pair[0] });
+        //        }
+        //        else
+        //        {
+        //            dPathsReversed[pair[1]].Add(pair[0]);
+        //        }
+        //        if (!dPathWithDest.ContainsKey(pair[0]))
+        //        {
+        //            dPathWithDest.Add(pair[0], new List<Destination> {new Destination(pair[1])});
+        //        }
+        //        else
+        //        {
+        //            var f = dPathWithDest[pair[0]].Find(x => x.City == pair[1]);
+        //            if (f == null)
+        //                dPathWithDest[pair[0]].Add(new Destination(pair[1]));
+        //            else
+        //                f.Multiplier++;
+        //        }
 
-                if (!dPathWithDestReversed.ContainsKey(pair[1]))
-                {
-                    dPathWithDestReversed.Add(pair[1], new List<Destination> { new Destination(pair[0]) });
-                }
-                else
-                {
-                    var f = dPathWithDestReversed[pair[1]].Find(x => x.City == pair[0]);
-                    if (f == null)
-                        dPathWithDestReversed[pair[1]].Add(new Destination(pair[0]));
-                    else
-                        f.Multiplier++;
-                }
-            }
+        //        if (!dPathWithDestReversed.ContainsKey(pair[1]))
+        //        {
+        //            dPathWithDestReversed.Add(pair[1], new List<Destination> { new Destination(pair[0]) });
+        //        }
+        //        else
+        //        {
+        //            var f = dPathWithDestReversed[pair[1]].Find(x => x.City == pair[0]);
+        //            if (f == null)
+        //                dPathWithDestReversed[pair[1]].Add(new Destination(pair[0]));
+        //            else
+        //                f.Multiplier++;
+        //        }
+        //    }
 
-            //sw.Start();
-            ////Solve(ints[0], ints[1]);
-            ////int paths = Solve();//Alternative3.Solve(s_N, DPaths);
-            //int pathsFirst = FirstSolution.Solve(1, s_N, DPaths);
-            //sw.Stop();
-            //TimeSpan firstSolTime = sw.Elapsed;
-            //Console.WriteLine($"First Solution: {pathsFirst} paths in {firstSolTime} time");
-            //sw.Restart();
-            //int firstSolM01 = FirstSolutionM01.Solve(1, s_N, DPaths);
-            //sw.Stop();
-            //TimeSpan firstSolM01Time = sw.Elapsed;
-            //Console.WriteLine($"First Solution Modification 01: {firstSolM01} paths in {firstSolM01Time} time");
-            //sw.Restart();
-            //int pathsAlt3 = Alternative3.Solve(1, s_N, DPaths);
-            //sw.Stop();
-            //TimeSpan altSol3Time = sw.Elapsed;
-            //Console.WriteLine($"Alternative 3 solution: {pathsAlt3} paths in {altSol3Time} time");
+        //    //sw.Start();
+        //    ////Solve(ints[0], ints[1]);
+        //    ////int paths = Solve();//Alternative3.Solve(s_N, DPaths);
+        //    //int pathsFirst = FirstSolution.Solve(1, s_N, DPaths);
+        //    //sw.Stop();
+        //    //TimeSpan firstSolTime = sw.Elapsed;
+        //    //Console.WriteLine($"First Solution: {pathsFirst} paths in {firstSolTime} time");
+        //    //sw.Restart();
+        //    //int firstSolM01 = FirstSolutionM01.Solve(1, s_N, DPaths);
+        //    //sw.Stop();
+        //    //TimeSpan firstSolM01Time = sw.Elapsed;
+        //    //Console.WriteLine($"First Solution Modification 01: {firstSolM01} paths in {firstSolM01Time} time");
+        //    //sw.Restart();
+        //    //int pathsAlt3 = Alternative3.Solve(1, s_N, DPaths);
+        //    //sw.Stop();
+        //    //TimeSpan altSol3Time = sw.Elapsed;
+        //    //Console.WriteLine($"Alternative 3 solution: {pathsAlt3} paths in {altSol3Time} time");
 
-            foreach (bool rev in reversed)
-            {
-                //bool rev = i == 1;
-                foreach (var algorithm in algorithms)
-                {
-                    sw.Restart();
-                    var paths = algorithm.Item2(rev ? s_N : 1, rev ? 1 : s_N, rev ? dPathsReversed : DPaths);
-                    sw.Stop();
-                    string revStr = rev ? "(reversed):" : ":";
-                    Console.WriteLine($"{algorithm.Item1} {revStr} {paths} paths in {sw.Elapsed} time");
-                    sw.Reset();
-                }
-            }
+        //    foreach (bool rev in reversed)
+        //    {
+        //        //bool rev = i == 1;
+        //        foreach (var algorithm in algorithms)
+        //        {
+        //            sw.Restart();
+        //            var paths = algorithm.Item2(rev ? s_N : 1, rev ? 1 : s_N, rev ? dPathsReversed : DPaths);
+        //            sw.Stop();
+        //            string revStr = rev ? "(reversed):" : ":";
+        //            Console.WriteLine($"{algorithm.Item1} {revStr} {paths} paths in {sw.Elapsed} time");
+        //            sw.Reset();
+        //        }
+        //    }
 
-            foreach (bool rev in reversed)
-            {
-                //bool rev = i == 1;
-                foreach (var algorithm in algorithmsWithDest)
-                {
-                    sw.Restart();
-                    var paths = algorithm.Item2(rev ? s_N : 1, rev ? 1 : s_N, rev ? dPathWithDestReversed : dPathWithDest);
-                    sw.Stop();
-                    string revStr = rev ? "(reversed):" : ":";
-                    Console.WriteLine($"{algorithm.Item1} {revStr} {paths} paths in {sw.Elapsed} time");
-                    sw.Reset();
-                }
-            }
+        //    foreach (bool rev in reversed)
+        //    {
+        //        //bool rev = i == 1;
+        //        foreach (var algorithm in algorithmsWithDest)
+        //        {
+        //            sw.Restart();
+        //            var paths = algorithm.Item2(rev ? s_N : 1, rev ? 1 : s_N, rev ? dPathWithDestReversed : dPathWithDest);
+        //            sw.Stop();
+        //            string revStr = rev ? "(reversed):" : ":";
+        //            Console.WriteLine($"{algorithm.Item1} {revStr} {paths} paths in {sw.Elapsed} time");
+        //            sw.Reset();
+        //        }
+        //    }
 
-            //Console.WriteLine(paths < 0 ? "INFINITE PATHS" : (paths / 2).ToString());
-            //Console.WriteLine($"It took {sw.Elapsed} to calculate");
-            Console.ReadLine();
-        }
+        //    //Console.WriteLine(paths < 0 ? "INFINITE PATHS" : (paths / 2).ToString());
+        //    //Console.WriteLine($"It took {sw.Elapsed} to calculate");
+        //    Console.ReadLine();
+        //}
 
         private static readonly Dictionary<int, List<int>> DPaths = new Dictionary<int, List<int>>();
         private static long s_PathCount;
