@@ -10,6 +10,7 @@ namespace KingdomConnectivity
     class FirstSolutionM01
 
     {
+        //test
         private static Dictionary<int, List<int>> s_DPaths = new Dictionary<int, List<int>>();
         private static Dictionary<int, long> keyNodePaths = new Dictionary<int, long>();
         //private static long s_PathCount;
