@@ -8,6 +8,10 @@ namespace MatrixLayerRotation
 {
     class Program
     {
+        enum Direction{Down, Right, Up, Left}
+
+        private static Direction[,] directionMatrix;
+
         static void Main(string[] args)
         {
             int[] parts = Array.ConvertAll(Console.ReadLine().Split(' '), int.Parse);
@@ -27,6 +31,21 @@ namespace MatrixLayerRotation
                 }
             }
 
+        }
+
+        private static void PrepareDirectionMatrix(int row, int col)
+        {
+            directionMatrix = new Direction[row, col];
+
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < col; j++)
+                {
+                    if(i >= j && i < row-j-1 && i < col-i-1)
+                        directionMatrix[i,j] = Direction.Down;
+                    else if()
+                }
+            }
         }
     }
 }
