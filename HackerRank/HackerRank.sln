@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackerRank", "HackerRank\HackerRank.csproj", "{BCBF6AE0-E7AA-4813-B732-74E49D9AE3CB}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryNumbers", "BinaryNumbers\BinaryNumbers.csproj", "{E04EC86A-93BC-42EB-86DA-FCD1B4B83AAF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixLayerRotation", "MatrixLayerRotation\MatrixLayerRotation.csproj", "{00FD2C2E-9B7E-4D28-8DFA-58D93F870EE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThePowerSum", "ThePowerSum\ThePowerSum.csproj", "{4E794548-AF18-4AA5-A7DC-753E2703AE08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,8 +47,15 @@ Global
 		{00FD2C2E-9B7E-4D28-8DFA-58D93F870EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00FD2C2E-9B7E-4D28-8DFA-58D93F870EE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00FD2C2E-9B7E-4D28-8DFA-58D93F870EE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E794548-AF18-4AA5-A7DC-753E2703AE08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E794548-AF18-4AA5-A7DC-753E2703AE08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E794548-AF18-4AA5-A7DC-753E2703AE08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E794548-AF18-4AA5-A7DC-753E2703AE08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1624F4B6-3AB8-4607-97F4-4AF336195589}
 	EndGlobalSection
 EndGlobal
