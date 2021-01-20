@@ -15,7 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryNumbers", "BinaryNumb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixLayerRotation", "MatrixLayerRotation\MatrixLayerRotation.csproj", "{00FD2C2E-9B7E-4D28-8DFA-58D93F870EE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThePowerSum", "ThePowerSum\ThePowerSum.csproj", "{4E794548-AF18-4AA5-A7DC-753E2703AE08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThePowerSum", "ThePowerSum\ThePowerSum.csproj", "{4E794548-AF18-4AA5-A7DC-753E2703AE08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiggerIsGreater", "BiggerIsGreater\BiggerIsGreater.csproj", "{BE286C4A-57C6-4742-8AE7-E2963B5C0AF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{4E794548-AF18-4AA5-A7DC-753E2703AE08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E794548-AF18-4AA5-A7DC-753E2703AE08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E794548-AF18-4AA5-A7DC-753E2703AE08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE286C4A-57C6-4742-8AE7-E2963B5C0AF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE286C4A-57C6-4742-8AE7-E2963B5C0AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE286C4A-57C6-4742-8AE7-E2963B5C0AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE286C4A-57C6-4742-8AE7-E2963B5C0AF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
