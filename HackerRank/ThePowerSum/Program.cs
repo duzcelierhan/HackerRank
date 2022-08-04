@@ -15,7 +15,7 @@ using System.Runtime.CompilerServices;
 
 class Solution
 {
-
+    // A challenging one
     // Complete the powerSum function below.
     static int powerSum(int X, int N)
     {
